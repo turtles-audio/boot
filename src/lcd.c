@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "rcc.h"
+#include "gpio.h"
 
 #define LTDC_BASE 0x50001000
 #define LTDC_SSCR (*(volatile uint32_t*) (LTDC_BASE + 0x8))
@@ -20,16 +21,5 @@ void lcd_timing() {
 }
 
 void lcd_enable() {
-    rcc_ltdc_enable();
-    rcc_gpio_enable();
 
-    (*(volatile uint32_t*)(0x58022000)) &= ~(0x3 << (15 * 2));
-    (*(volatile uint32_t*)(0x58022000)) |= (0x1 << (15 * 2));
-    //(*(volatile uint32_t*)(0x58021C18)) = (0);
-
-    while (1) {}
-
-    //LTDC_GCR = 0b1;
-    //LTDC_BCCR = 0xFFFFFF00;
-    return;
 }

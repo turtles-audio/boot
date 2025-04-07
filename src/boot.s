@@ -4,26 +4,26 @@
 .section .vector, "a"
     .word _stack_start
     .word boot
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
-    .word lock
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
+    .word boot
     .skip 32
 
 .section .text
