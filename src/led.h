@@ -12,4 +12,8 @@ enum LED {
 
 typedef enum LED led_t;
 
+int led_init();
+int led_on(led_t led);
+int led_off(led_t led);
+
 #endif

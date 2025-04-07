@@ -28,7 +28,7 @@
 
 .section .text
 boot:
-    bl lcd_enable
+    bl init
     b .
 lock:
     b .

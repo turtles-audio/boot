@@ -13,11 +13,7 @@
 #define LTDC_IER (*(volatile uint32_t*) (LTDC_BASE + 0x34))
 
 void lcd_timing() {
-    //LTDC_SSCR = 0x90001;
-    //LTDC_BPCR = 0x1D0003;
-    //LTDC_AWCR = 0x15D00F3;
-    //LTDC_TWCR = (0x167 << 16) | 0xF7;
-    return;
+    
 }
 
 void lcd_enable() {
