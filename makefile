@@ -7,6 +7,8 @@ CFLAGS := $(CWARN) -nostdlib -mcpu=cortex-m7 -T$(LINK)
 
 # Directories
 SRC := src
+DRIVER := $(SRC)/driver
+CORE := $(SRC)/core
 TARGET := target
 DEBUG := $(TARGET)/debug
 RELEASE := $(TARGET)/release
@@ -19,8 +21,11 @@ debug: $(DEBUG)/$(NAME).elf
 release: CFLAGS += -Os -Werror
 release: $(RELEASE)/$(NAME).elf
 
-SOURCES := $(wildcard $(SRC)/*.s $(SRC)/*.c)
-OBJECTS :=  $(patsubst $(SRC)/%.s,$(TARGET)/%.o,$(filter %.s,$(SOURCES))) $(patsubst $(SRC)/%.c,$(TARGET)/%.o,$(filter %.c,$(SOURCES)))
+SOURCES := $(wildcard $(SRC)/*.s $(SRC)/*.c $(DRIVER)/*.c $(CORE)/*.c)
+OBJECTS := $(patsubst $(SRC)/%.s,$(TARGET)/%.o,$(wildcard $(SRC)/*.s)) \
+		   $(patsubst $(SRC)/%.c,$(TARGET)/%.o,$(wildcard $(SRC)/*.c)) \
+		   $(patsubst $(DRIVER)/%.c,$(TARGET)/%.o,$(wildcard $(DRIVER)/*.c)) \
+		   $(patsubst $(CORE)/%.c,$(TARGET)/%.o,$(wildcard $(CORE)/*.c))
 
 $(RELEASE):
 	mkdir "$(RELEASE)"
@@ -36,6 +41,13 @@ $(TARGET)/%.o: $(SRC)/%.s $(TARGET)
 
 $(TARGET)/%.o: $(SRC)/%.c $(TARGET)
 	$(CC) -c $(CFLAGS) $< -o $@
+
+$(TARGET)/%.o: $(DRIVER)/%.c $(TARGET)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+$(TARGET)/%.o: $(CORE)/%.c $(TARGET)
+	$(CC) -c $(CFLAGS) $< -o $@
+
 
 $(DEBUG)/$(NAME).elf: $(OBJECTS) $(DEBUG)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(DEBUG)/$(NAME).elf
