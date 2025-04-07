@@ -5,8 +5,8 @@ void init() {
 
     while (1) {
         led_on(LED_GREEN);
-        for (int i = 0; i < 1000000; i++); // Delay
+        for (int i = 0; i < 1000000; i++);
         led_off(LED_GREEN);
-        for (int i = 0; i < 1000000; i++); // Delay
+        for (int i = 0; i < 1000000; i++);
     }
 }

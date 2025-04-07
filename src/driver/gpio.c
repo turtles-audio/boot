@@ -20,7 +20,7 @@ gpio_reg_t gpio_register(gpio_slot_t slot, gpio_register_t offset) {
         case GPIOI: return (gpio_reg_t) GPIOI_BASE + offset;
         case GPIOJ: return (gpio_reg_t) GPIOJ_BASE + offset;
         case GPIOK: return (gpio_reg_t) GPIOK_BASE + offset;
-        default: return (gpio_reg_t) GPIOA_BASE + offset;
+        case GPIOA: default: return (gpio_reg_t) GPIOA_BASE + offset;
     }
 }
 
@@ -38,6 +38,7 @@ gpio_value_t gpio_bssr(gpio_slot_t slot, gpio_pin_t pin, gpio_value_t value) {
         case GPIO_LOW:
             *bssr &= ~(1 << pin);
             break;
+        case GPIO_HIGH:
         default:
             *bssr |= (1 << pin);
             break;

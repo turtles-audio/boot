@@ -1,7 +1,6 @@
 #ifndef GPIO_H
 #define GPIO_H
 
-#include <stdint.h>
 #include "rcc.h"
 
 #define GPIO_BASE 0x58020000
@@ -103,8 +102,8 @@ typedef enum GPIO_OSPEEDR gpio_ospeedr_t;
 typedef enum GPIO_PUPDR gpio_pupdr_t;
 typedef enum GPIO_VALUE gpio_value_t;
 
-typedef uint32_t* gpio_reg_t;
-typedef uint32_t gpio_register_t;
+typedef unsigned int* gpio_reg_t;
+typedef unsigned int gpio_register_t;
 
 void gpio_init();
 

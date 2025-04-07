@@ -42,4 +42,10 @@ SECTIONS {
     } >FLASH
 
     .rodata : ALIGN(8) { *(.rodata*) } >FLASH
+
+    /DISCARD/ : {
+        *(.comment)
+        *(.ARM.*)
+    }
+
 }

@@ -1,18 +1,29 @@
 NAME := bootv7
 
-CC := arm-none-eabi-gcc
-LINK=boot.ld
-CWARN := -Wall -Wextra
-CFLAGS := $(CWARN) -nostdlib -mcpu=cortex-m7 -T$(LINK)
-
 # Directories
 SRC := src
 DRIVER := $(SRC)/driver
 CORE := $(SRC)/core
 TARGET := target
+OBJ := $(TARGET)/obj
 DEBUG := $(TARGET)/debug
 RELEASE := $(TARGET)/release
 
+# Compiler
+CC := arm-none-eabi-gcc
+LINK=$(SRC)/image.ld
+
+CWARN := -Wall -Wextra
+CWARN += -Wshadow -Wundef -Wcast-align
+CWARN += -Wswitch-enum -Wunreachable-code
+CWARN += -Wformat=2 -Wformat-nonliteral -Wformat-security
+CWARN += -Wpointer-arith -Wredundant-decls
+
+CFLAGS := $(CWARN) -mcpu=cortex-m7 -T$(LINK)
+CFLAGS += -nostdlib -nostartfiles -nostdinc
+CFLAGS += -zmax-page-size=1 -s -static
+
+default: all
 build: clean release
 
 debug: CFLAGS += -g -Og
@@ -22,30 +33,33 @@ release: CFLAGS += -Os -Werror
 release: $(RELEASE)/$(NAME).elf
 
 SOURCES := $(wildcard $(SRC)/*.s $(SRC)/*.c $(DRIVER)/*.c $(CORE)/*.c)
-OBJECTS := $(patsubst $(SRC)/%.s,$(TARGET)/%.o,$(wildcard $(SRC)/*.s)) \
-		   $(patsubst $(SRC)/%.c,$(TARGET)/%.o,$(wildcard $(SRC)/*.c)) \
-		   $(patsubst $(DRIVER)/%.c,$(TARGET)/%.o,$(wildcard $(DRIVER)/*.c)) \
-		   $(patsubst $(CORE)/%.c,$(TARGET)/%.o,$(wildcard $(CORE)/*.c))
-
-$(RELEASE):
-	mkdir "$(RELEASE)"
-
-$(DEBUG):
-	mkdir "$(DEBUG)"
+OBJECTS := $(patsubst $(SRC)/%.s,$(OBJ)/%.o,$(wildcard $(SRC)/*.s)) \
+		   $(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(wildcard $(SRC)/*.c)) \
+		   $(patsubst $(DRIVER)/%.c,$(OBJ)/%.o,$(wildcard $(DRIVER)/*.c)) \
+		   $(patsubst $(CORE)/%.c,$(OBJ)/%.o,$(wildcard $(CORE)/*.c))
 
 $(TARGET):
-	mkdir "$(TARGET)"
+	-mkdir "$(TARGET)"
 
-$(TARGET)/%.o: $(SRC)/%.s $(TARGET)
+$(RELEASE): $(TARGET)
+	-mkdir "$(RELEASE)"
+
+$(DEBUG): $(TARGET)
+	-mkdir "$(DEBUG)"
+
+$(OBJ): $(TARGET)
+	-mkdir "$(OBJ)"
+
+$(OBJ)/%.o: $(SRC)/%.s $(OBJ)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-$(TARGET)/%.o: $(SRC)/%.c $(TARGET)
+$(OBJ)/%.o: $(SRC)/%.c $(OBJ)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-$(TARGET)/%.o: $(DRIVER)/%.c $(TARGET)
+$(OBJ)/%.o: $(DRIVER)/%.c $(OBJ)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-$(TARGET)/%.o: $(CORE)/%.c $(TARGET)
+$(OBJ)/%.o: $(CORE)/%.c $(OBJ)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 
@@ -58,4 +72,19 @@ $(RELEASE)/$(NAME).elf: $(OBJECTS) $(RELEASE)
 clean:
 	-rmdir /q /s $(TARGET)
 
-.PHONY: clean debug build release
+all: clean release
+	-rmdir /q /s "$(OBJ)"
+	make debug
+
+help:
+	@echo Usage: make [target1] [target2] ...
+	@echo Targets:
+	@echo   all       - Build all targets (default)
+	@echo   build     - Release alias
+	@echo   release   - Build release version
+	@echo   debug     - Build debug version
+	@echo Commands:
+	@echo   clean     - Clean up build files
+	@echo   help      - Show this help message
+
+.PHONY: help default all build debug release build
