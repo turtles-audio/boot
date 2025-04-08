@@ -21,7 +21,7 @@ CWARN += -Wpointer-arith -Wredundant-decls
 
 CFLAGS := $(CWARN) -mcpu=cortex-m7 -T$(LINK)
 CFLAGS += -nostdlib -nostartfiles -nostdinc
-CFLAGS += -zmax-page-size=1 -s -static
+CFLAGS += -zmax-page-size=0x1000
 
 default: all
 build: clean release
@@ -29,7 +29,7 @@ build: clean release
 debug: CFLAGS += -g -Og
 debug: $(DEBUG)/$(NAME).elf
 
-release: CFLAGS += -Os -Werror
+release: CFLAGS += -Os -Werror -s -static
 release: $(RELEASE)/$(NAME).elf
 
 SOURCES := $(wildcard $(SRC)/*.s $(SRC)/*.c $(DRIVER)/*.c $(CORE)/*.c)
@@ -70,10 +70,10 @@ $(RELEASE)/$(NAME).elf: $(OBJECTS) $(RELEASE)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(RELEASE)/$(NAME).elf
 
 clean:
-	-rmdir /q /s $(TARGET)
+	-rm -rf $(TARGET)
 
 all: clean release
-	-rmdir /q /s "$(OBJ)"
+	-rm -rf "$(OBJ)"
 	make debug
 
 help:

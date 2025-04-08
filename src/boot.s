@@ -1,34 +1,10 @@
-.global lock
-.global boot
-
 .section .vector, "a"
     .word _stack_start
     .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .word boot
-    .skip 32
+    .skip 248
 
 .section .text
 boot:
     bl init
     b .
-lock:
-    b .
+.global boot

@@ -1,7 +1,4 @@
-_phys_fram_start = 0x30000000;
-_phys_binary_start = 0x8000000;
-
-_special = _phys_binary_start + 0x50;
+_special = 0x30000000;
 
 ENTRY(boot)
 
@@ -47,5 +44,4 @@ SECTIONS {
         *(.comment)
         *(.ARM.*)
     }
-
 }

@@ -10,17 +10,17 @@ gpio_reg_t gpio_register(gpio_slot_t slot, gpio_register_t offset) {
     }
 
     switch (slot) {
-        case GPIOB: return (gpio_reg_t) GPIOB_BASE + offset;
-        case GPIOC: return (gpio_reg_t) GPIOC_BASE + offset;
-        case GPIOD: return (gpio_reg_t) GPIOD_BASE + offset;
-        case GPIOE: return (gpio_reg_t) GPIOE_BASE + offset;
-        case GPIOF: return (gpio_reg_t) GPIOF_BASE + offset;
-        case GPIOG: return (gpio_reg_t) GPIOG_BASE + offset;
-        case GPIOH: return (gpio_reg_t) GPIOH_BASE + offset;
-        case GPIOI: return (gpio_reg_t) GPIOI_BASE + offset;
-        case GPIOJ: return (gpio_reg_t) GPIOJ_BASE + offset;
-        case GPIOK: return (gpio_reg_t) GPIOK_BASE + offset;
-        case GPIOA: default: return (gpio_reg_t) GPIOA_BASE + offset;
+        case GPIOB: return (gpio_reg_t) (GPIOB_BASE + offset);
+        case GPIOC: return (gpio_reg_t) (GPIOC_BASE + offset);
+        case GPIOD: return (gpio_reg_t) (GPIOD_BASE + offset);
+        case GPIOE: return (gpio_reg_t) (GPIOE_BASE + offset);
+        case GPIOF: return (gpio_reg_t) (GPIOF_BASE + offset);
+        case GPIOG: return (gpio_reg_t) (GPIOG_BASE + offset);
+        case GPIOH: return (gpio_reg_t) (GPIOH_BASE + offset);
+        case GPIOI: return (gpio_reg_t) (GPIOI_BASE + offset);
+        case GPIOJ: return (gpio_reg_t) (GPIOJ_BASE + offset);
+        case GPIOK: return (gpio_reg_t) (GPIOK_BASE + offset);
+        case GPIOA: default: return (gpio_reg_t) (GPIOA_BASE + offset);
     }
 }
 
@@ -33,13 +33,13 @@ gpio_value_t gpio_read(gpio_slot_t slot, gpio_pin_t pin) {
 
 gpio_value_t gpio_bssr(gpio_slot_t slot, gpio_pin_t pin, gpio_value_t value) {
     gpio_reg_t bssr = gpio_register(slot, GPIO_BSRR);
+    gpio_reg_t odr = gpio_register(slot, GPIO_ODR);
 
     switch (value) {
         case GPIO_LOW:
-            *bssr &= ~(1 << pin);
+            *odr &= ~(1 << pin);
             break;
         case GPIO_HIGH:
-        default:
             *bssr |= (1 << pin);
             break;
     }
