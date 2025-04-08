@@ -22,11 +22,11 @@ SECTIONS {
         _bss_start = .;
     } >SRAM
 
-    .vtboot : ALIGN(4) {
+    .vt.boot : ALIGN(4) {
         KEEP(*(.vector))
     } >FLASH
 
-    .vtroot : ALIGN(4) {
+    .vt.root : ALIGN(4) {
         KEEP(*(.vector.root))
     } >VECTOR
 
@@ -39,8 +39,6 @@ SECTIONS {
     .rodata : {
         *(.rodata)
     } >FLASH
-
-    .rodata : ALIGN(8) { *(.rodata*) } >FLASH
 
     /DISCARD/ : {
         *(.comment)
