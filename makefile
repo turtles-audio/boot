@@ -1,4 +1,4 @@
-NAME := bootv7
+NAME := boot
 
 # Directories
 SRC := src
@@ -21,7 +21,7 @@ CWARN += -Wpointer-arith -Wredundant-decls
 
 CFLAGS := $(CWARN) -mcpu=cortex-m7 -T$(LINK)
 CFLAGS += -nostdlib -nostartfiles -nostdinc
-CFLAGS += -zmax-page-size=0x1000
+CFLAGS += -zmax-page-size=0x100
 
 default: all
 build: clean release
@@ -70,10 +70,10 @@ $(RELEASE)/$(NAME).elf: $(OBJECTS) $(RELEASE)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(RELEASE)/$(NAME).elf
 
 clean:
-	-rm -rf $(TARGET)
+	-rmdir /s /q $(TARGET)
 
 all: clean release
-	-rm -rf "$(OBJ)"
+	-rmdir /s /q "$(OBJ)"
 	make debug
 
 help:

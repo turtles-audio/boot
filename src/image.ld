@@ -1,10 +1,8 @@
-_special = 0x30000000;
-
 ENTRY(boot)
 
 MEMORY {
-    VECTOR(rx) : ORIGIN = 0, LENGTH = 0xFFFF
-    FLASH (rx) : ORIGIN = 0x8000000, LENGTH = 512K
+    VECTOR (rx) : ORIGIN = 0x0, LENGTH = 0xFF
+    FLASH (rx) : ORIGIN = 0x8000000, LENGTH = 1M
     SRAM (rw) : ORIGIN = 0x30000000, LENGTH = 8M
 }
 
@@ -24,9 +22,13 @@ SECTIONS {
         _bss_start = .;
     } >SRAM
 
-    .vector : ALIGN(4) {
+    .vtboot : ALIGN(4) {
         KEEP(*(.vector))
     } >FLASH
+
+    .vtroot : ALIGN(4) {
+        KEEP(*(.vector.root))
+    } >VECTOR
 
     .text : {
         KEEP(*(.text))
